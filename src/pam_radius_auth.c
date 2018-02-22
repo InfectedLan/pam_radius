@@ -1343,7 +1343,7 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh,int flags,int argc,CONST c
 		retval = PAM_SUCCESS;
 
 		// Save the authenticated user's username to file.
-		_pam_save_user(user);
+		save_user_to_file(user);
 	} else {
 		retval = PAM_AUTH_ERR;	/* authentication failure */
 	}

@@ -52,7 +52,7 @@
 
 #include "radius.h"
 #include "md5.h"
-#include "users.h"
+#include "radius_users.h"
 
 /* Defaults for the prompt option */
 #define MAXPROMPT 33               /* max prompt length, including '\0' */

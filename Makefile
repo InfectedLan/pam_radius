@@ -46,6 +46,9 @@ src/pam_radius_auth.o: src/pam_radius_auth.c src/pam_radius_auth.h
 src/md5.o: src/md5.c src/md5.h
 	@$(MAKE) -C src $(notdir $@)
 
+src/radius_users.o: src/radius_users.c src/radius_users.h
+	@$(MAKE) -C src $(notdir $@)
+
 #
 # This is what should work on Irix:
 #pam_radius_auth.so: pam_radius_auth.o md5.o
@@ -64,7 +67,7 @@ src/md5.o: src/md5.c src/md5.h
 #
 #	gcc -shared pam_radius_auth.o md5.o -lpam -lc -o pam_radius_auth.so
 #
-pam_radius_auth.so: src/pam_radius_auth.o src/md5.o
+pam_radius_auth.so: src/pam_radius_auth.o src/md5.o src/radius_users.o
 	$(CC) $(LDFLAGS) $^ -lpam -o pam_radius_auth.so
 
 ######################################################################

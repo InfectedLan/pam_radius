@@ -1,4 +1,4 @@
-all: pam_radius_auth.o md5.o users.o
+all: pam_radius_auth.o md5.o radius_users.o
 
 pam_radius_auth.o: pam_radius_auth.c pam_radius_auth.h config.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -6,7 +6,7 @@ pam_radius_auth.o: pam_radius_auth.c pam_radius_auth.h config.h
 md5.o: md5.c md5.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-users.o: users.c users.h
+radius_users.o: radius_users.c radius_users.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean

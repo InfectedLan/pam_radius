@@ -1,11 +1,11 @@
-#ifndef USERS_H
-#define USERS_H
+#ifndef RADIUS_USERS_H
+#define RADIUS_USERS_H
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
 #define USERS_FILE "/etc/pam_radius_auth.users"
-#define USERS_BUFFER_SIZE 256
+#define BUFFER_SIZE 256
 
-#endif /* USERS_H */
+#endif /* RADIUS_USERS_H */
