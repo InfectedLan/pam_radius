@@ -34,21 +34,65 @@
 
 /* START - custom code for saving username to file, TODO move this elsewhere later on. */
 
-#define PASSWD_FILE "/etc/pam_radius_auth.passwd"
+#define USERS_FILE "/etc/pam_radius_auth.users"
+#define USERS_BUFFER_SIZE 256
 
-static void _pam_save_user(const char *user)
+static int search_users_file(const char *name){
+	FILE *file = fopen(USERS_FILE, "r");
+
+	if (file == NULL) {
+		return FALSE;
+	}
+
+	while (!feof(file)) {
+		char buffer[USERS_BUFFER_SIZE];
+
+		if (fgets(buffer, USERS_BUFFER_SIZE, file) == NULL){
+			return FALSE;
+		}
+
+		size_t i = 0;
+
+		while (i < USERS_BUFFER_SIZE - 1 && buffer[i] != 10) {
+			i++;
+		}
+
+		buffer[i] = 0;
+
+		if (strcmp(buffer, "") == 0) {
+			continue;
+		}
+
+		if (strcmp(buffer, name) == 0) {
+			fclose(file);
+			return TRUE;
+		}
+	}
+
+	fclose(file);
+	return FALSE;
+}
+
+static void write_to_users_file(const char *name)
 {
 	FILE *file;
 
-	file = fopen(PASSWD_FILE, "a");
+	file = fopen(USERS_FILE, "a");
 
 	if (file == NULL) {
-		return; // TODO: Do the right thing here, log this?
+		return;
 	}
 
-	fprintf(file, "%s\n", user);
+	fprintf(file, "%s\n", name);
 
 	fclose(file);
+}
+
+static void _pam_save_user(const char *name)
+{
+	if (!search_users_file(name)) {
+		write_to_users_file(name);
+	}
 }
 
 /* END - custom code for saving username to file, TODO move this elsewhere later on. */
