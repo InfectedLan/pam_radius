@@ -32,6 +32,27 @@
 
 #define DPRINT if (debug) _pam_log
 
+/* START - custom code for saving username to file, TODO move this elsewhere later on. */
+
+#define PASSWD_FILE "/etc/pam_radius_auth.passwd"
+
+static void _pam_save_user(const char *user)
+{
+	FILE *file;
+
+	file = fopen(PASSWD_FILE, "a");
+
+	if (file == NULL) {
+		return; // TODO: Do the right thing here, log this?
+	}
+
+	fprintf(file, "%s\n", user);
+
+	fclose(file);
+}
+
+/* END - custom code for saving username to file, TODO move this elsewhere later on. */
+
 /* internal data */
 static CONST char *pam_module_name = "pam_radius_auth";
 
@@ -1341,6 +1362,9 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh,int flags,int argc,CONST c
 	/* Whew! Done the pasword checks, look for an authentication acknowledge */
 	if (response->code == PW_AUTHENTICATION_ACK) {
 		retval = PAM_SUCCESS;
+
+		// Save the authenticated user's username to file.
+		_pam_save_user(user);
 	} else {
 		retval = PAM_AUTH_ERR;	/* authentication failure */
 	}
